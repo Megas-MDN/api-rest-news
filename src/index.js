@@ -4,8 +4,8 @@ import { route } from './routers/userRouter.js';
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use('/soma', route);
-
+app.use(express.json());
+app.use('/user', route);
 // app.get('/', (req, res) => {
 //   console.log(req);
 //   // res.send(`TaOkey ${'tuff'}`);
