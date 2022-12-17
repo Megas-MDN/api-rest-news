@@ -1,9 +1,11 @@
 import express from 'express';
 import { route } from './routers/userRouter.js';
+import { connectDataBase } from './database/db.js';
 
 const app = express();
 const port = process.env.PORT || 3001;
 
+connectDataBase();
 app.use(express.json());
 app.use('/user', route);
 // app.get('/', (req, res) => {
