@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { loginService } from '../services/authService.js';
+import { loginService, generateToken } from '../services/authService.js';
 
 export const loginController = async (req, res) => {
   const { email, password } = req.body;
@@ -19,8 +19,9 @@ export const loginController = async (req, res) => {
         .status(400)
         .send({ message: 'User no found or Password invalid' });
     }
-    // console.log('Password é :: ', passIsValid);
-    res.send({ message: 'Login taoKey' });
+    const token = generateToken(user._id);
+    console.log('token é :: ', token);
+    res.send({ message: 'Login taoKey', token });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: error.message });
