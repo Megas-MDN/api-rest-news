@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 import { route } from './routers/userRouter.js';
 import { route as routerAuth } from './routers/authRouter.js';
+import { route as routerNews } from './routers/newsRouter.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ connectDataBase();
 app.use(express.json());
 app.use('/user', route);
 app.use('/auth', routerAuth);
+app.use('/news', routerNews);
 
 // app.get('/', (req, res) => {
 //   console.log(req);
