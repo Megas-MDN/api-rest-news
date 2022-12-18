@@ -14,7 +14,7 @@ export const createNews = async (req, res) => {
       title,
       text,
       banner,
-      id: 'test',
+      user: { _id: '639e54dc2eb59511cffff4f5' },
       likes: [],
       comments: [],
     });
@@ -26,6 +26,17 @@ export const createNews = async (req, res) => {
   }
 };
 
-export const getAllNews = (req, res) => {
-  res.status(200).send({ message: 'All the news registred' });
+export const getAllNews = async (req, res) => {
+  try {
+    const news = await findAllNewsService();
+    if (!news || news.length === 0) {
+      return res
+        .status(400)
+        .send({ message: 'There are not news in database' });
+    }
+    res.send({ message: 'All the news registred', news });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: error.message });
+  }
 };
