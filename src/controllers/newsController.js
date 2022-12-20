@@ -6,6 +6,7 @@ import {
   findByIdNewsService,
   findNewsBySearchService,
   byUserService,
+  updateNewsService,
 } from '../services/newsService.js';
 
 export const createNews = async (req, res) => {
@@ -131,5 +132,30 @@ export const byUser = async (req, res) => {
     res
       .status(500)
       .send({ message: 'Unable to access  news from this user', error });
+  }
+};
+
+export const updateNews = async (req, res) => {
+  try {
+    const { title, text, banner } = req.body;
+    const { id } = req.params;
+
+    if (!title && !text && !banner) {
+      return res.status(400).send({ message: 'All fields is required' });
+    }
+
+    const news = await findByIdNewsService(id);
+    // console.log('ids', news.user._id.toString() === req.userId);
+    if (news.user._id.toString() !== req.userId) {
+      return res
+        .status(400)
+        .send({ message: 'You not allow to edit this post' });
+    }
+
+    await updateNewsService(id, title, text, banner);
+    res.send({ message: 'Your post has been successfully updated.' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Unable to access news', error });
   }
 };
