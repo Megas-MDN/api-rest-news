@@ -7,6 +7,7 @@ import {
   findNewsBySearch,
   byUser,
   updateNews,
+  deleteNews,
 } from '../controllers/newsController.js';
 import { authMeddle } from '../middlewares/authMeddle.js';
 
@@ -18,5 +19,6 @@ route.get('/top', topNews);
 route.get('/search', findNewsBySearch);
 route.get('/byuser', authMeddle, byUser);
 route.patch('/:id', authMeddle, updateNews);
+route.delete('/:id', authMeddle, deleteNews);
 
 route.get('/:id', authMeddle, findByIdNews);

@@ -7,6 +7,7 @@ import {
   findNewsBySearchService,
   byUserService,
   updateNewsService,
+  deleteNewsService,
 } from '../services/newsService.js';
 
 export const createNews = async (req, res) => {
@@ -149,11 +150,30 @@ export const updateNews = async (req, res) => {
     if (news.user._id.toString() !== req.userId) {
       return res
         .status(400)
-        .send({ message: 'You not allow to edit this post' });
+        .send({ message: "You don't have permission to edit this post." });
     }
 
     await updateNewsService(id, title, text, banner);
     res.send({ message: 'Your post has been successfully updated.' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Unable to access news', error });
+  }
+};
+
+export const deleteNews = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const news = await findByIdNewsService(id);
+    if (news.user._id.toString() !== req.userId) {
+      return res
+        .status(400)
+        .send({ message: 'You do not have permission to delete this post.' });
+    }
+
+    await deleteNewsService(id);
+    res.send({ message: 'Your post has been deleted with successfully.' });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Unable to access news', error });
