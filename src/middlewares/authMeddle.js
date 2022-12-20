@@ -21,11 +21,6 @@ export const authMeddle = (req, res, next) => {
         .send({ message: 'This user is not allower to post, bad token' });
     }
 
-    const { title, text, banner } = req.body;
-    if (!title || !text || !banner) {
-      return res.status(400).send({ message: 'All fields is required' });
-    }
-
     jwt.verify(token, process.env.SECRET_JWT, async (error, decoded) => {
       console.log(error);
       console.log('decoded', decoded);

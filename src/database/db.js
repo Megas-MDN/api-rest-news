@@ -8,6 +8,6 @@ export const connectDataBase = () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
-    .then((r) => console.log('Conecção estabelecida com sucesso'))
-    .catch((err) => console.log('Falha ao conectar no banco de dados'));
+    .then((r) => console.log('Connection established successfully'))
+    .catch((err) => console.log('Failed to connect to database'));
 };

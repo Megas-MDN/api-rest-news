@@ -4,6 +4,8 @@ import {
   countNews,
   topNewsService,
   findByIdNewsService,
+  findNewsBySearchService,
+  byUserService,
 } from '../services/newsService.js';
 
 export const createNews = async (req, res) => {
@@ -96,5 +98,38 @@ export const findByIdNews = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Unable to access latest news', error });
+  }
+};
+
+export const findNewsBySearch = async (req, res) => {
+  try {
+    const { search } = req.query;
+
+    const news = await findNewsBySearchService(search);
+    if (!news) {
+      return res.status(400).send({ message: 'No news found' });
+    }
+    res.send({ message: 'News find with sucess', news });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Unable to access news', error });
+  }
+};
+
+export const byUser = async (req, res) => {
+  try {
+    const id = req.userId;
+    const news = await byUserService(id);
+    if (!news) {
+      return res
+        .status(400)
+        .send({ message: 'No news from this user was founded' });
+    }
+    res.send({ message: 'News find with sucess', news });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send({ message: 'Unable to access  news from this user', error });
   }
 };
