@@ -330,7 +330,7 @@
         "parameters": [
           {
             "in": "query",
-            "name": "title",
+            "name": "search",
             "type": "string",
             "required": true
           }
