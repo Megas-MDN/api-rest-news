@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { route } from './routers/userRouter.js';
 import { route as routerAuth } from './routers/authRouter.js';
 import { route as routerNews } from './routers/newsRouter.js';
-import { route as swaggerRoute } from './routers/swaggerRoute.js';
+import { route as swaggerRoute } from './routers/swaggerRoute.cjs';
 
 dotenv.config();
 
