@@ -10,7 +10,9 @@ export const create = async (req, res) => {
     const { name, userName, email, password, avatar, background } = req.body;
     // console.log(user);
     if (!name || !userName || !email || !password || !avatar || !background) {
-      res.status(400).send({ message: 'Fill all areas to send the form' });
+      return res
+        .status(400)
+        .send({ message: 'Fill all areas to send the form' });
     }
 
     const user = await createService(req.body);
