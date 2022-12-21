@@ -36,16 +36,6 @@ export const findAllUsers = async (req, res) => {
         .status(400)
         .send({ message: 'There are not users in database' });
     }
-    // const noPass = users.map(
-    //   ({ _id: id, name, userName, email, avatar, background }) => ({
-    //     id,
-    //     name,
-    //     userName,
-    //     email,
-    //     avatar,
-    //     background,
-    //   })
-    // );
 
     res.status(200).send({ message: 'Sucess! All users in db', users });
   } catch (error) {

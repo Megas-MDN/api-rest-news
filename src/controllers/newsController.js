@@ -8,6 +8,10 @@ import {
   byUserService,
   updateNewsService,
   deleteNewsService,
+  likeNewsService,
+  deleteLikeNewsService,
+  commentNewsService,
+  deleteCommentNewsService,
 } from '../services/newsService.js';
 
 export const createNews = async (req, res) => {
@@ -47,11 +51,9 @@ export const getAllNews = async (req, res) => {
         : await findAllNewsService(+limit, +offset);
     // console.log('nextNews', nextNews);
     const nextUrl = `${req.baseUrl}?limit=${limit}&offset=${nextNews}`;
-    console.log('url Nxt', nextUrl);
 
     const previus = +offset - +limit < 0 ? 0 : +offset - +limit;
     const previusUrl = `${req.baseUrl}?limit=${limit}&offset=${previus}`;
-    console.log('url Prev', previusUrl);
 
     if (!news || news.length === 0) {
       return res
@@ -76,7 +78,7 @@ export const getAllNews = async (req, res) => {
 export const topNews = async (req, res) => {
   try {
     const news = await topNewsService();
-    console.log('news', news);
+
     if (!news) {
       return res.status(400).send({ message: 'News not found' });
     }
@@ -90,9 +92,9 @@ export const topNews = async (req, res) => {
 export const findByIdNews = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('id', id);
+
     const news = await findByIdNewsService(id);
-    console.log('news', news);
+
     if (!news) {
       return res.status(400).send({ message: 'News not found' });
     }
@@ -177,5 +179,59 @@ export const deleteNews = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Unable to access news', error });
+  }
+};
+
+export const likeNews = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await likeNewsService(id, req.userId);
+
+    if (!response) {
+      await deleteLikeNewsService(id, req.userId);
+      return res.send({ message: 'You unlike this post' });
+    }
+    res.send({ message: 'Like', response });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Unable to like this news', error });
+  }
+};
+
+export const commentNews = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { comment } = req.body;
+
+    if (!comment) {
+      return res.status(400).send({ message: 'You have send a comment.' });
+    }
+    await commentNewsService(id, comment, req.userId);
+    res.send({ message: 'You commented this post' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Unable to cooment this news', error });
+  }
+};
+
+export const deleteCommentNews = async (req, res) => {
+  try {
+    const { idNews, idComment } = req.params;
+
+    const response = await deleteCommentNewsService(
+      idNews,
+      idComment,
+      req.userId
+    );
+    const comment = response.comments.find((el) => el.id === idComment);
+    if (!comment || comment?.userId !== req.userId) {
+      return res
+        .status(400)
+        .send({ message: "You can't remover this comment." });
+    }
+    res.send({ message: 'You comment has been deleted' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'Unable to delete this comment', error });
   }
 };

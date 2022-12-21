@@ -20,7 +20,7 @@ export const loginController = async (req, res) => {
         .send({ message: 'User no found or Password invalid' });
     }
     const token = generateToken(user._id);
-    console.log('token é :: ', token);
+
     res.send({ message: 'Login taoKey', token });
   } catch (error) {
     console.log(error);

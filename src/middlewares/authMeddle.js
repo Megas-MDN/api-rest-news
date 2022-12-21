@@ -22,8 +22,6 @@ export const authMeddle = (req, res, next) => {
     }
 
     jwt.verify(token, process.env.SECRET_JWT, async (error, decoded) => {
-      console.log(error);
-      console.log('decoded', decoded);
       if (error) {
         return res
           .status(401)

@@ -30,3 +30,40 @@ export const updateNewsService = (id, title, text, banner) =>
   );
 
 export const deleteNewsService = (id) => News.findByIdAndDelete({ _id: id });
+
+export const likeNewsService = (id, userId) =>
+  News.findOneAndUpdate(
+    { _id: id, 'likes.userId': { $nin: [userId] } },
+    {
+      $push: { likes: { userId, createAt: new Date() } },
+    }
+  );
+
+export const deleteLikeNewsService = (id, userId) =>
+  News.findByIdAndUpdate({ _id: id }, { $pull: { likes: { userId } } });
+
+export const commentNewsService = (id, comment, userId) => {
+  const idComment = Math.floor(Date.now() * Math.random()).toString(36);
+
+  return News.findOneAndUpdate(
+    { _id: id },
+    {
+      $push: {
+        comments: {
+          id: idComment,
+          userId,
+          comment,
+          createAt: new Date(),
+        },
+      },
+    }
+  );
+};
+
+export const deleteCommentNewsService = (idNews, idComment, userId) =>
+  News.findByIdAndUpdate(
+    { _id: idNews },
+    {
+      $pull: { comments: { id: idComment, userId } },
+    }
+  );
